@@ -9,9 +9,9 @@ do
   git commit -m "commit msg #${i}"
 done
 
-git log --oneline -q
+git log --oneline
 
-#for ((i = num_tests; i >= 0; i--))
-#do
+for ((i = num_tests; i >= 0; i--))
+do
   git reset --hard HEAD
-#done
+done
