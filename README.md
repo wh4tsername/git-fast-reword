@@ -9,4 +9,4 @@
 
 **Запуск тестов:**
 > export PATH=$PATH":$HOME/path/to/tests_dir"  
-> tiny-test-git-fast-reword <args>  
+> tiny-test-git-fast-reword \<args>  
