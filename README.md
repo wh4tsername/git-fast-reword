@@ -2,7 +2,7 @@
 Простой аналог git rebase --interactive с ограниченным функционалом. 
 Для работы требуется pygit2.  
 **Пример работы:**  
-![](img/example.jpg)  
+![](img/example.png)  
 **Portable установка:**  
 > export PATH=$PATH":$HOME/path/to/script"  
 
