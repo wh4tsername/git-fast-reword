@@ -13,7 +13,7 @@ done
 
 git log --oneline
 
-for ((i = num_tests; i >= 0; i--))
+for ((i = num_tests; i > 0; i--))
 do
   git reset --hard HEAD~1
 done
