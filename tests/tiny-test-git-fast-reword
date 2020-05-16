@@ -9,7 +9,7 @@ do
   echo "TEST TEXT ${i}" > test${i}.txt
   cd ../
   git add tiny_test_bin
-  cd tiny_test_bin
+  cd tiny_test_bin || exit
   git commit -m "commit msg #${i}"
 done
 
@@ -22,7 +22,7 @@ do
   git-fast-reword HEAD~${i} "commit msg updated #${i}"
 done
 
-cd tiny_test_bin
+cd tiny_test_bin || exit
 
 git log --oneline
 
