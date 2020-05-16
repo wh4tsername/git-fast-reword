@@ -6,7 +6,7 @@ mkdir tiny_test_bin
 cd tiny_test_bin || exit
 for ((i = 0; i < num_tests; i++))
 do
-  touch test${i}.txt
+  echo "TEST TEXT ${i}" > test${i}.txt
   cd ../
   git add tiny_test_bin
   cd tiny_test_bin
