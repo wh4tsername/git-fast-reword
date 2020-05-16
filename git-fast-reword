@@ -1,0 +1,82 @@
+#!/usr/bin/env python
+import pygit2
+import sys
+
+
+class LocalRepo:
+    def __init__(self):
+        """
+        Inits repo object.
+        Also checks, if repo exists.
+        """
+        try:
+            self.__repo = pygit2.Repository('.')
+        except pygit2.GitError:
+            raise RuntimeError("Script launched not in git repo directory...")
+        self.__queries = dict()
+        self.__commits = set()
+        self.__visited = dict()
+        self.__query_size = 0
+        self.__cur_query = None
+
+    def reword(self, queries):
+        """
+        Rewords commits from queries.
+        Example: HEAD "msg" HEAD~2 "another msg" HEAD~1 "commit msg"
+        """
+        for commit, new_msg in queries:
+            key = self.__repo.revparse_single(commit)
+            self.__queries[key] = new_msg
+            self.__visited[key] = False
+
+        self.__commits = set(self.__queries.keys())
+        self.__query_size = len(self.__commits)
+
+        for commit in self.__commits:
+            if not(self.__visited[commit]):
+                self.__cur_query = commit
+                head = self.__traverse(self.__repo.revparse_single("HEAD"))
+                self.__repo.head.set_target(head.hex)
+
+    def __traverse(self, current):
+        """
+        Traverses single branch. Changes commit messages and updates parents.
+        """
+        new_commit = None
+        if current == self.__cur_query:
+            new_parents = [parent.hex for parent in current.parents]
+            new_msg = self.__queries[current]
+            new_commit = self.__create_commit(current, new_msg, new_parents)
+            self.__visited[current] = True
+        else:
+            if len(current.parents) != 1:
+                raise RuntimeError("Ambiguous path. Unable to traverse multiple parents...")
+
+            parent = self.__traverse(current.parents[0])
+            if current in self.__commits:
+                new_msg = self.__queries[current]
+                new_commit = self.__create_commit(current, new_msg, [parent.hex])
+                self.__visited[current] = True
+            else:
+                new_commit = self.__create_commit(current, current.message, [parent.hex])
+
+        return self.__repo.get(new_commit)
+
+    def __create_commit(self, current, msg, parents):
+        """
+        Create copy of commit with different msg and parents
+        """
+        return self.__repo.create_commit(
+            None,
+            current.author,
+            current.committer,
+            msg,
+            current.tree.hex,
+            parents
+        )
+
+
+if __name__ == '__main__':
+    queries = zip(sys.argv[1::2], sys.argv[2::2])
+    local = LocalRepo()
+    local.reword(queries)
