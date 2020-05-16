@@ -13,6 +13,13 @@ done
 
 git log --oneline
 
+for ((i = 0; i < num_tests; i++))
+do
+  git-fast-reword HEAD~${i} "commit msg updated #${i}"
+done
+
+git log --oneline
+
 for ((i = num_tests; i > 0; i--))
 do
   git reset --hard HEAD~1
