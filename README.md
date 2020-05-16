@@ -1,6 +1,8 @@
 # git-fast-reword
 Простой аналог git rebase --interactive с ограниченным функционалом. 
 Для работы требуется pygit2.  
+**Пример работы:**  
+![](img/example.jpg)  
 **Portable установка:**  
 > export PATH=$PATH":$HOME/path/to/script"  
 

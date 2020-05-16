@@ -49,8 +49,11 @@ class LocalRepo:
             new_commit = self.__create_commit(current, new_msg, new_parents)
             self.__visited[current] = True
         else:
-            if len(current.parents) != 1:
+            num_parents = len(current.parents)
+            if num_parents > 1:
                 raise RuntimeError("Ambiguous path. Unable to traverse multiple parents...")
+            elif num_parents == 0:
+                raise RuntimeError("No parents to traverse...")
 
             parent = self.__traverse(current.parents[0])
             if current in self.__commits:
