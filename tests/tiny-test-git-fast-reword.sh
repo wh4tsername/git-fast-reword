@@ -7,7 +7,9 @@ cd tiny_test_bin || exit
 for ((i = 0; i < num_tests; i++))
 do
   touch test${i}.txt
-  git add -A
+  cd ../
+  git add tiny_test_bin
+  cd tiny_test_bin
   git commit -m "commit msg #${i}"
 done
 
